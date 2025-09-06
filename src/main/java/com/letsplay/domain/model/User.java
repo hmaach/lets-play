@@ -1,25 +1,24 @@
 package com.letsplay.domain.model;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 public class User {
 
     private final String id;
-    private String username;
+    private String name;
     private String email;
     private final String password;
-    private final Set<Role> roles;
+    private int age;
+    private final String role;
     private final LocalDateTime createdAt;
 
-    public User(String id, String username, String email, String password, Set<Role> roles, LocalDateTime createdAt) {
+    public User(String id, String name, String email, String password, int age, String role, LocalDateTime createdAt) {
         this.id = id;
-        this.username = username;
+        this.name = name;
         this.email = email;
         this.password = password;
-        this.roles = new HashSet<>(roles);
+        this.age = age;
+        this.role = role;
         this.createdAt = createdAt;
     }
 
@@ -28,8 +27,8 @@ public class User {
         return id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
     public String getEmail() {
@@ -40,28 +39,28 @@ public class User {
         return password;
     }
 
+    public int getAge() {
+        return age;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public Set<Role> getRoles() {
-        return Collections.unmodifiableSet(roles);
-    }
-
     // Domain actions
-    public void changeUsername(String username) {
-        this.username = username;
+    public void changeName(String name) {
+        this.name = name;
     }
 
     public void changeEmail(String email) {
         this.email = email;
     }
 
-    public void addRole(Role role) {
-        this.roles.add(role);
-    }
-
-    public void removeRole(Role role) {
-        this.roles.remove(role);
+    public void changeAge(int age) {
+        this.age = age;
     }
 }

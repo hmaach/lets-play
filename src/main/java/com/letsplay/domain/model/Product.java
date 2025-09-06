@@ -1,5 +1,7 @@
 package com.letsplay.domain.model;
 
+import java.time.LocalDateTime;
+
 public class Product {
 
     private final String id;
@@ -7,13 +9,22 @@ public class Product {
     private String name;
     private String description;
     private Double price;
+    private final LocalDateTime createdAt;
 
-    public Product(String id, String name, String description, Double price, String userId) {
+    public Product(
+            String id,
+            String name,
+            String description,
+            Double price,
+            String userId,
+            LocalDateTime createdAt
+    ) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.userId = userId;
+        this.createdAt = createdAt;
     }
 
     // --- Getters ---
@@ -50,7 +61,11 @@ public class Product {
         if (price <= 0) {
             throw new IllegalArgumentException("Price must be positive");
         }
-        
+
         this.price = price;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }

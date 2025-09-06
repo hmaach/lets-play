@@ -28,7 +28,6 @@ src/main/java/com/letsplay/
 │   ├── model/
 │   │   ├── User.java
 │   │   ├── Product.java
-│   │   └── Role.java
 │   ├── port/
 │   │   ├── in/               # Input ports (use cases)
 │   │   │   ├── UserService.java
