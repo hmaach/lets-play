@@ -30,7 +30,8 @@ src/main/java/com/letsplay/
 Other Files:
 ├── .env-example        # Example environment file
 ├── compose.yaml        # Docker Compose configuration
-└── pom.xml             # Maven configuration
+├── pom.xml             # Maven configuration
+└── setup.sh            # Setup the envirement of the project 
 
 ````
 
@@ -55,29 +56,28 @@ Copy the example `.env` file and fill in your MongoDB credentials:
 cp .env-example .env
 ```
 
-Then update `.env` with your desired MongoDB credentials:
+Then update `.env` with your desired MongoDB credentials and database name:
 
 ```env
 MONGO_INITDB_ROOT_USERNAME=username
 MONGO_INITDB_ROOT_PASSWORD=password
+MONGO_INITDB_DATABASE=database-name
 ```
 
 ---
 
-### 3. Start MongoDB with Docker Compose
+### 3. Setup the envirement
 
-Make sure Docker (rootless-compatible) and Docker Compose v2 are installed.
 
-Start the container in detached mode:
 
 ```bash
-docker compose up -d
+soure ./setup.sh
 ```
 
 This will:
 
-* Start MongoDB on port `27017`
-* Use environment variables from `.env`
+* install docker rootless if it doesn't exist
+* export environment variables from `.env`
 * Create a Docker volume to persist data
 
 ---
