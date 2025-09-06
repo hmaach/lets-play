@@ -7,7 +7,7 @@ if echo "$OUTPUT" | grep -q "Cannot connect to the Docker daemon"; then
     echo "Docker daemon not running or not installed. Attempting to install Docker..."
 
     if [ -x "cmd/install_docker.sh" ]; then
-        ./install_docker.sh
+        ./cmd/install_docker.sh
     else
         echo "Error: Installer script cmd/install_docker.sh not found or not executable."
         exit 1
