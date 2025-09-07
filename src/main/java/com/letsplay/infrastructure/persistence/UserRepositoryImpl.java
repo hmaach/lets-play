@@ -37,11 +37,12 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByUsername(String name) {
-        Query query = new Query(Criteria.where("name").is(name));
+    public Optional<User> findByEmail(String email) {
+        Query query = new Query(Criteria.where("email").is(email));
         UserEntity entity = mongoTemplate.findOne(query, UserEntity.class);
         return Optional.ofNullable(UserMapper.toDomain(entity));
     }
+
 
     @Override
     public List<User> findAll() {

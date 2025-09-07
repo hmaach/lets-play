@@ -1,12 +1,12 @@
-# LETS PLAY
+# LET'S PLAY
 
 A Java backend project using Hexagonal Architecture, integrated with MongoDB and containerized using Docker. It follows clean architecture principles with clear separation of concerns between domain logic, application logic, and infrastructure.
 
 ---
 
-## 📁 1.3 Project Structure (Hexagonal Architecture)
+### 1.1 Project Structure (Hexagonal Architecture)
 
-```
+```text
 src/main/java/com/letsplay/
     ├── LetsPlayApplication.java
     ├── domain/                    # Core business logic (no dependencies)
@@ -33,9 +33,26 @@ Other Files:
 ├── pom.xml             # Maven configuration
 └── setup.sh            # Setup the envirement of the project 
 
-````
-
+```
 ---
+
+### 1.2 Database Design
+
+```mermaid
+classDiagram
+    User "1" -- "n" Product : Owns
+    User : +String id
+    User : +String name
+    User : +String email
+    User : +String password
+    User : +String role
+    Product : +String id
+    Product : +String name
+    Product : +String description
+    Product : +Double price
+    Product : +String userId
+```
+
 
 ## Getting Started
 
