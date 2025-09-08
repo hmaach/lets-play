@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -21,9 +23,10 @@ import com.letsplay.infrastructure.security.JwtFilter;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
     private final JwtFilter jwtFilter;
 
-    @Autowired
+    @Autowired 
     private final CustomUserDetailsService userDetailsService;
 
     public SecurityConfig(JwtFilter jwtFilter, CustomUserDetailsService userDetailsService) {
@@ -37,9 +40,9 @@ public class SecurityConfig {
         http.csrf(customizer -> customizer.disable()); // http.csrf().disable();
 
         http.authorizeHttpRequests(request -> request
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/products").permitAll()
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("api/auth/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "api/products").permitAll()
+                .requestMatchers("api/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
         );
 
@@ -62,5 +65,10 @@ public class SecurityConfig {
         provider.setPasswordEncoder(new BCryptPasswordEncoder(10));
         provider.setUserDetailsService(userDetailsService);
         return provider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 }

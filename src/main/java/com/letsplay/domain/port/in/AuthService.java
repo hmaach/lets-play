@@ -7,6 +7,4 @@ public interface AuthService {
 
     User register(CreateUserCommand command);
 
-    boolean existsByEmail(String email);
-
 }

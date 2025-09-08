@@ -4,20 +4,31 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.letsplay.application.dto.request.CreateUserCommand;
+import com.letsplay.application.dto.request.LoginUserCommand;
 import com.letsplay.application.exception.EmailAlreadyExistsException;
 import com.letsplay.domain.model.User;
 import com.letsplay.domain.port.in.AuthService;
 import com.letsplay.infrastructure.persistence.UserRepositoryImpl;
+import com.letsplay.infrastructure.security.JwtUtil;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private final UserRepositoryImpl userRepository;
+
+    @Autowired
+    AuthenticationManager authManager;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
 
@@ -27,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public User register(CreateUserCommand cmd) {
-        if (existsByEmail(cmd.email())) {
+        if (!userRepository.findByEmail(cmd.email()).isEmpty()) {
             throw new EmailAlreadyExistsException(cmd.email());
         }
 
@@ -47,9 +58,15 @@ public class AuthServiceImpl implements AuthService {
         return user;
     }
 
-    @Override
-    public boolean existsByEmail(String email) {
-        return !userRepository.findByEmail(email).isEmpty();
+    public String verify(LoginUserCommand cmd) {
+        Authentication auth = authManager.
+                authenticate(new UsernamePasswordAuthenticationToken(cmd.email(), cmd.password()));
+
+        if (auth.isAuthenticated()) {
+            return jwtUtil.generateToken(cmd);
+        }
+
+        return "fail";
     }
 
 }

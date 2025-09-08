@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.letsplay.application.dto.request.CreateUserCommand;
+import com.letsplay.application.dto.request.LoginUserCommand;
 import com.letsplay.domain.model.User;
 import com.letsplay.domain.service.AuthServiceImpl;
 
@@ -22,7 +23,12 @@ public class AuthController {
     }
 
     @PostMapping("/api/auth/register")
-    public User register(@RequestBody @Valid CreateUserCommand command) {
-        return service.register(command);
+    public User register(@RequestBody @Valid CreateUserCommand cmd) {
+        return service.register(cmd);
+    }
+
+    @PostMapping("/api/auth/login")
+    public String login(@RequestBody @Valid LoginUserCommand cmd) {
+        return service.verify(cmd);
     }
 }
