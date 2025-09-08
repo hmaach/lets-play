@@ -43,7 +43,6 @@ public class UserRepositoryImpl implements UserRepository {
         return Optional.ofNullable(UserMapper.toDomain(entity));
     }
 
-
     @Override
     public List<User> findAll() {
         return mongoTemplate.findAll(UserEntity.class)

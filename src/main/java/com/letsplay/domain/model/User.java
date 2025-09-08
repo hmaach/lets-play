@@ -7,8 +7,8 @@ public class User {
     private final String id;
     private String name;
     private String email;
+    private String role;
     private final String password;
-    private final String role;
     private final LocalDateTime createdAt;
 
     public User(String id, String name, String email, String password, String role, LocalDateTime createdAt) {
@@ -52,5 +52,9 @@ public class User {
 
     public void changeEmail(String email) {
         this.email = email;
+    }
+
+    public void changeRole(String role) {
+        this.role = role;
     }
 }
