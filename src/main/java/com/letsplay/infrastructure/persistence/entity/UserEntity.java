@@ -12,17 +12,17 @@ public class UserEntity {
     private String id;
     private String name;
     private String email;
-    private final String password;
-    private int age;
+    private String password;
+    private Integer age;
     private String role;
-    private final LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
     public UserEntity(
             String id,
             String name,
             String email,
             String password,
-            int age,
+            Integer age,
             String role,
             LocalDateTime createdAt
     ) {
@@ -33,6 +33,10 @@ public class UserEntity {
         this.age = age;
         this.role = role;
         this.createdAt = createdAt;
+    }
+
+    public UserEntity() {
+        // for Mongo
     }
 
     public String getId() {
@@ -51,11 +55,11 @@ public class UserEntity {
         this.name = name;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 

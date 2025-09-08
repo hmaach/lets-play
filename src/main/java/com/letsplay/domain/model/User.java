@@ -8,11 +8,11 @@ public class User {
     private String name;
     private String email;
     private final String password;
-    private int age;
+    private Integer age;
     private final String role;
     private final LocalDateTime createdAt;
 
-    public User(String id, String name, String email, String password, int age, String role, LocalDateTime createdAt) {
+    public User(String id, String name, String email, String password, Integer age, String role, LocalDateTime createdAt) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -39,7 +39,7 @@ public class User {
         return password;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
@@ -60,7 +60,7 @@ public class User {
         this.email = email;
     }
 
-    public void changeAge(int age) {
+    public void changeAge(Integer age) {
         this.age = age;
     }
 }
