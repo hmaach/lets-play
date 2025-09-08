@@ -13,7 +13,6 @@ public class UserEntity {
     private String name;
     private String email;
     private String password;
-    private Integer age;
     private String role;
     private LocalDateTime createdAt;
 
@@ -22,7 +21,6 @@ public class UserEntity {
             String name,
             String email,
             String password,
-            Integer age,
             String role,
             LocalDateTime createdAt
     ) {
@@ -30,7 +28,6 @@ public class UserEntity {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.age = age;
         this.role = role;
         this.createdAt = createdAt;
     }
@@ -53,14 +50,6 @@ public class UserEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
     }
 
     public String getEmail() {
