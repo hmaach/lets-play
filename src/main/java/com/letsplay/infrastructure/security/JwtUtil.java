@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.letsplay.application.dto.request.LoginUserCommand;
 
 import io.jsonwebtoken.Jwts;
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class JwtUtil {
@@ -17,6 +18,11 @@ public class JwtUtil {
     private final long jwtExpirationMs = 3600000; // 1h
 
     public JwtUtil() {
+    }
+
+    @PostConstruct
+    public void init() {
+        System.out.println("JWT Secret: " + jwtSecret);
     }
 
     public String generateToken(LoginUserCommand cmd) {
