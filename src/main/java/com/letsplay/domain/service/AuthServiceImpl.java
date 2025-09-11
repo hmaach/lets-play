@@ -16,7 +16,7 @@ import com.letsplay.application.exception.EmailAlreadyExistsException;
 import com.letsplay.domain.model.User;
 import com.letsplay.domain.port.in.AuthService;
 import com.letsplay.infrastructure.persistence.UserRepositoryImpl;
-import com.letsplay.infrastructure.security.JwtUtil;
+import com.letsplay.infrastructure.security.JwtService;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -28,9 +28,9 @@ public class AuthServiceImpl implements AuthService {
     AuthenticationManager authManager;
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtService jwtService;
 
-    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     public AuthServiceImpl(UserRepositoryImpl userRepository) {
         this.userRepository = userRepository;
@@ -63,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
                 authenticate(new UsernamePasswordAuthenticationToken(cmd.email(), cmd.password()));
 
         if (auth.isAuthenticated()) {
-            return jwtUtil.generateToken(cmd);
+            return jwtService.generateToken(cmd);
         }
 
         return "fail";

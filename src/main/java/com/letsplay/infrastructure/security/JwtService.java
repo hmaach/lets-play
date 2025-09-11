@@ -1,5 +1,7 @@
 package com.letsplay.infrastructure.security;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -7,32 +9,24 @@ import org.springframework.stereotype.Service;
 import com.letsplay.application.dto.request.LoginUserCommand;
 
 import io.jsonwebtoken.Jwts;
-import jakarta.annotation.PostConstruct;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
-public class JwtUtil {
+public class JwtService {
 
     @Value("${jwt.secret}")
     private String jwtSecret;
 
     private final long jwtExpirationMs = 3600000; // 1h
 
-    public JwtUtil() {
-    }
-
-    @PostConstruct
-    public void init() {
-        System.out.println("JWT Secret: " + jwtSecret);
-    }
 
     public String generateToken(LoginUserCommand cmd) {
-        return jwtSecret;
-        // return Jwts.builder()
-        //         .setSubject(cmd.email())
-        //         .setIssuedAt(new Date())
-        //         .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
-        //         .signWith(SignatureAlgorithm.HS512, jwtSecret)
-        //         .compact();
+        return Jwts.builder()
+                .setSubject(cmd.email())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
     }
 
     public String getUsernameFromToken(String token) {

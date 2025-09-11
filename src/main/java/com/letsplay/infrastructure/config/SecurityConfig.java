@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.letsplay.infrastructure.security.CustomAuthHandlers;
 import com.letsplay.infrastructure.security.CustomUserDetailsService;
@@ -26,7 +27,7 @@ public class SecurityConfig {
     @Autowired
     private final JwtFilter jwtFilter;
 
-    @Autowired 
+    @Autowired
     private final CustomUserDetailsService userDetailsService;
 
     public SecurityConfig(JwtFilter jwtFilter, CustomUserDetailsService userDetailsService) {
@@ -52,6 +53,8 @@ public class SecurityConfig {
                 .authenticationEntryPoint(new CustomAuthHandlers.JwtAuthenticationEntryPoint())
         );
 
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
         http.sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
@@ -62,7 +65,7 @@ public class SecurityConfig {
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(new BCryptPasswordEncoder(10));
+        provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
         provider.setUserDetailsService(userDetailsService);
         return provider;
     }
