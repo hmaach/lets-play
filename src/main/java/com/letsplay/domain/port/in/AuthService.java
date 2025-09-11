@@ -1,10 +1,13 @@
 package com.letsplay.domain.port.in;
 
 import com.letsplay.application.dto.request.CreateUserCommand;
-import com.letsplay.domain.model.User;
+import com.letsplay.application.dto.request.LoginUserCommand;
+import com.letsplay.application.dto.response.UserResponse;
 
 public interface AuthService {
 
-    User register(CreateUserCommand command);
+    public String login(LoginUserCommand cmd);
+
+    UserResponse register(CreateUserCommand command);
 
 }

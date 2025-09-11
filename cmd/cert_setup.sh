@@ -29,5 +29,5 @@ if [ ! -f "$CERT_FILE" ]; then
 
   echo "Certificate generated at $CERT_FILE"
 else
-  echo "ℹCertificate already exists: $CERT_FILE"
+  echo "Certificate already exists: $CERT_FILE"
 fi

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.letsplay.application.dto.request.CreateUserCommand;
 import com.letsplay.application.dto.request.LoginUserCommand;
+import com.letsplay.application.dto.response.UserResponse;
 import com.letsplay.application.exception.EmailAlreadyExistsException;
 import com.letsplay.domain.model.User;
 import com.letsplay.domain.port.in.AuthService;
@@ -37,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public User register(CreateUserCommand cmd) {
+    public UserResponse register(CreateUserCommand cmd) {
         if (!userRepository.findByEmail(cmd.email()).isEmpty()) {
             throw new EmailAlreadyExistsException(cmd.email());
         }
@@ -55,10 +56,11 @@ public class AuthServiceImpl implements AuthService {
 
         userRepository.save(user);
 
-        return user;
+        return UserResponse.fromDomain(user);
     }
 
-    public String verify(LoginUserCommand cmd) {
+    @Override
+    public String login(LoginUserCommand cmd) {
         Authentication auth = authManager.
                 authenticate(new UsernamePasswordAuthenticationToken(cmd.email(), cmd.password()));
 

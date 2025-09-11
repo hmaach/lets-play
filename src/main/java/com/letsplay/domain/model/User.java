@@ -8,7 +8,7 @@ public class User {
     private String name;
     private String email;
     private String role;
-    private final String password;
+    private String password;
     private final LocalDateTime createdAt;
 
     public User(String id, String name, String email, String password, String role, LocalDateTime createdAt) {
@@ -56,5 +56,9 @@ public class User {
 
     public void changeRole(String role) {
         this.role = role;
+    }
+
+    public void changePassword(String encode) {
+        this.password = encode;
     }
 }
