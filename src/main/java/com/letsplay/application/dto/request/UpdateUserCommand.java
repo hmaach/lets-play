@@ -1,40 +1,54 @@
 package com.letsplay.application.dto.request;
 
-import java.util.Optional;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 public class UpdateUserCommand {
 
-    private Optional<String> username = Optional.empty();
-    private Optional<String> email = Optional.empty();
-    private Optional<String> password = Optional.empty();
+    @NotBlank
+    private String name;
 
-    public UpdateUserCommand(Optional<String> username, Optional<String> email, Optional<String> password) {
-        this.username = username != null ? username : Optional.empty();
-        this.email = email != null ? email : Optional.empty();
-        this.password = password != null ? password : Optional.empty();
+    @Email
+    private String email;
+
+    @Size(min = 6, message = "Password must be at least 6 characters")
+    private String password;
+
+    @Pattern(regexp = "USER|ADMIN", message = "Role must be USER or ADMIN")
+    private String role;
+
+    public String getName() {
+        return name;
     }
 
-    public Optional<String> getUsername() {
-        return username;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setUsername(Optional<String> username) {
-        this.username = username != null ? username : Optional.empty();
-    }
-
-    public Optional<String> getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(Optional<String> email) {
-        this.email = email != null ? email : Optional.empty();
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public Optional<String> getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(Optional<String> password) {
-        this.password = password != null ? password : Optional.empty();
+    public void setPassword(String password) {
+        this.password = password;
     }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
 }

@@ -65,31 +65,37 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByEmail(String email) {
-        User user = userRepository.findByEmail(email).get();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(email));
         return user;
     }
 
     @Override
-    // TODO: validate the inputs of the request of updating a user 
     public User updateUser(String id, UpdateUserCommand cmd) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
-        cmd.getUsername().ifPresent(newName -> {
-            user.changeName(newName);
+        if (cmd.getName() != null) {
+            user.changeName(cmd.getName());
         }
-        );
 
-        cmd.getEmail().ifPresent(newEmail -> {
-            if (userRepository.findByEmail(newEmail).isPresent()) {
-                throw new EmailAlreadyExistsException(newEmail);
+        if (cmd.getEmail() != null && !user.getEmail().equals(cmd.getEmail())) {
+            if (userRepository.findByEmail(cmd.getEmail()).isPresent()) {
+                throw new EmailAlreadyExistsException(cmd.getEmail());
             }
-            user.changeEmail(newEmail);
-        });
+            user.changeEmail(cmd.getEmail());
+        }
 
-        cmd.getPassword().ifPresent(pw -> user.changePassword(encoder.encode(pw)));
+        if (cmd.getPassword() != null) {
+            user.changePassword(encoder.encode(cmd.getPassword()));
+        }
+
+        if (cmd.getRole() != null) {
+            user.changeRole(cmd.getRole());
+        }
 
         userRepository.save(user);
+
         return user;
     }
 

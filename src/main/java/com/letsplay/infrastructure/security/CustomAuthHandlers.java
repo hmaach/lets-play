@@ -26,9 +26,7 @@ public class CustomAuthHandlers {
                     response,
                     HttpServletResponse.SC_UNAUTHORIZED,
                     "UNAUTHORIZED",
-                    "Authentication is required, "
-                    + authException.getMessage() + ", "
-                    + authException.toString()
+                    "Authentication is required"
             );
         }
     }
