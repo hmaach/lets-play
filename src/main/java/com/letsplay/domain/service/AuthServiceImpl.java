@@ -65,10 +65,12 @@ public class AuthServiceImpl implements AuthService {
                 authenticate(new UsernamePasswordAuthenticationToken(cmd.email(), cmd.password()));
 
         if (auth.isAuthenticated()) {
-            return jwtService.generateToken(cmd);
-        }
+            User user = userRepository.findByEmail(cmd.email())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return "fail";
+            return jwtService.generateToken(user);
+        }
+        return "";
     }
 
 }
