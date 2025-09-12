@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.letsplay.application.dto.request.LoginUserCommand;
+import com.letsplay.domain.model.User;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,17 +19,17 @@ public class JwtService {
 
     private final long jwtExpirationMs = 3600000; // 1h
 
-
-    public String generateToken(LoginUserCommand cmd) {
+    public String generateToken(User user) {
         return Jwts.builder()
-                .setSubject(cmd.email())
+                .setSubject(user.getEmail())
+                .claim("role", user.getRole())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 
-    public String getUsernameFromToken(String token) {
+    public String getEmailFromToken(String token) {
         return Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
@@ -37,8 +37,16 @@ public class JwtService {
                 .getSubject();
     }
 
+    public String getRoleFromToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role", String.class);
+    }
+
     public boolean validateToken(String token, UserDetails userDetails) {
-        return getUsernameFromToken(token)
+        return getEmailFromToken(token)
                 .equals(userDetails.getUsername());
     }
 }
