@@ -1,58 +1,76 @@
 # LET'S PLAY
 
-A Java backend project using Hexagonal Architecture, integrated with MongoDB and containerized using Docker. It follows clean architecture principles with clear separation of concerns between domain logic, application logic, and infrastructure.
+A Java backend project using **Hexagonal Architecture**, integrated with **MongoDB**, and containerized using **Docker**. Follows clean architecture principles with clear separation of concerns between domain logic, application logic, and infrastructure.
 
 ---
 
-### 1.1 Project Structure (Hexagonal Architecture)
+## Project Structure
 
 ```text
 src/main/java/com/letsplay/
-    ├── LetsPlayApplication.java
-    ├── domain/                    # Core business logic (no dependencies)
-    │   ├── model/
-    │   ├── port/
-    │   │   ├── in/               # Input ports (use cases)
-    │   │   └── out/              # Output ports (interfaces)
-    │   └── service/              # Domain services (business logic)
-    ├── infrastructure/           # External concerns
-    │   ├── config/
-    │   ├── persistence/          # Database adapters
-    │   │   └── entity/
-    │   └── security/
-    └── application/              # Application layer
-        ├── controller/           # REST controllers
-        ├── dto/                  # Data Transfer Objects
-        │   ├── request/
-        │   └── response/
-        └── exception/            # Global exception handling
+├── LetsPlayApplication.java
+├── domain/            # Core business logic
+│   ├── model/
+│   ├── port/
+│   │   ├── in/       # Input ports (use cases)
+│   │   └── out/      # Output ports (interfaces)
+│   └── service/      # Domain services
+├── infrastructure/   # External concerns
+│   ├── config/
+│   ├── persistence/  # Database adapters
+│   └── security/
+└── application/      # Application layer
+    ├── controller/   # REST controllers
+    ├── dto/          # Request & Response DTOs
+    └── exception/    # Global exception handling
 
-Other Files:
-├── .env-example        # Example environment file
-├── compose.yaml        # Docker Compose configuration
-├── pom.xml             # Maven configuration
-└── setup.sh            # Setup the envirement of the project 
-
+Other files:
+├── .env-example      # Example environment variables
+├── compose.yaml      # Docker Compose config
+├── pom.xml           # Maven config
+└── setup.sh          # Setup environment script
 ```
+
 ---
 
-### 1.2 Database Design
+## Endpoints
+
+| Method | Endpoint         | Auth | Roles      | Description              |
+| ------ | ---------------- | ---- | ---------- | ------------------------ |
+| POST   | `/auth/register` | ❌    | -          | Register a new user      |
+| POST   | `/auth/login`    | ❌    | -          | User login               |
+| GET    | `/users`         | ✅    | Admin      | List all users           |
+| GET    | `/users/{id}`    | ✅    | Admin/User | Get user by ID           |
+| GET    | `/users/me`      | ✅    | Any        | Get current user profile |
+| POST   | `/users`         | ✅    | Admin      | Create user              |
+| PATCH  | `/users/{id}`    | ✅    | Admin/User | Update user details      |
+| DELETE | `/users/{id}`    | ✅    | Admin/User | Delete user              |
+| GET    | `/products`      | ❌    | -          | List all products        |
+| GET    | `/products/{id}` | ❌    | -          | Get product by ID        |
+| POST   | `/products`      | ✅    | Admin      | Create a product         |
+| PATCH  | `/products/{id}` | ✅    | Admin      | Update product           |
+| DELETE | `/products/{id}` | ✅    | Admin      | Delete product           |
+
+---
+
+## Database Design
 
 ```mermaid
 classDiagram
-    User "1" -- "n" Product : Owns
-    User : +String id
-    User : +String name
-    User : +String email
-    User : +String password
-    User : +String role
-    Product : +String id
-    Product : +String name
-    Product : +String description
-    Product : +Double price
-    Product : +String userId
+User "1" -- "n" Product : Owns
+User : +String id
+User : +String name
+User : +String email
+User : +String password
+User : +String role
+Product : +String id
+Product : +String name
+Product : +String description
+Product : +Double price
+Product : +String userId
 ```
 
+---
 
 ## Getting Started
 
@@ -61,57 +79,50 @@ classDiagram
 ```bash
 git clone https://github.com/hmaach/lets-play.git
 cd lets-play
-````
+```
 
----
-
-### 2. Set Up the Environment
-
-Copy the example `.env` file and fill in your MongoDB credentials:
+### 2. Set Up Environment
 
 ```bash
 cp .env-example .env
 ```
 
-Then update `.env` with your desired MongoDB credentials and database name:
+Update `.env` with your MongoDB credentials:
 
 ```env
+# Database config
 MONGO_INITDB_ROOT_USERNAME=username
 MONGO_INITDB_ROOT_PASSWORD=password
-MONGO_INITDB_DATABASE=database-name
+MONGO_INITDB_DATABASE=lets-play-db
+
+# JWT config
+JWT_SECRET=secret-key
+
+# SSL config
+CERT_PASSWORD=password
+CERT_ALIAS=letsplay
+CERT_DNAME=CN=localhost,OU=Dev,O=LetsPlay,L=Oujda,ST=Oriental,C=MA
+
 ```
 
----
-
-### 3. Setup the envirement
-
-
+### 3. Setup Environment
 
 ```bash
-soure ./setup.sh
+source ./setup.sh
 ```
 
 This will:
 
-* install docker rootless if it doesn't exist
-* export environment variables from `.env`
-* Create a Docker volume to persist data
-
----
+* Install Docker rootless if missing
+* Create Docker volume for persistent data
 
 ### 4. Connect to MongoDB
-
-#### From Host Machine (if `mongosh` or `mongo` CLI is installed)
 
 ```bash
 mongosh "mongodb://localhost:27017"
 ```
 
----
-
 ### 5. Stop MongoDB
-
-To stop and remove the container:
 
 ```bash
 docker compose down
@@ -119,12 +130,12 @@ docker compose down
 
 ---
 
-## ✅ Requirements
+## Requirements
 
-* [x] Java 17+
-* [x] Maven
-* [x] Angular (for frontend integration)
-* [x] MongoDB (running in Docker)
-* [x] `mongosh` for database testing
-* [x] Docker (Rootless compatible)
-* [x] Docker Compose v2 
+* Java 17+
+* Maven
+* MongoDB (Dockerized)
+* Docker (Rootless compatible)
+* Docker Compose v2
+* `mongosh` (optional, for testing)
+* Angular (for frontend integration)
