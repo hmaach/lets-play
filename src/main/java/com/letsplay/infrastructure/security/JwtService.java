@@ -10,6 +10,7 @@ import com.letsplay.domain.model.User;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class JwtService {
@@ -22,6 +23,7 @@ public class JwtService {
     public String generateToken(User user) {
         return Jwts.builder()
                 .setSubject(user.getEmail())
+                .claim("id", user.getId())
                 .claim("role", user.getRole())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
@@ -37,6 +39,14 @@ public class JwtService {
                 .getSubject();
     }
 
+    public String getIdFromToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("id", String.class);
+    }
+
     public String getRoleFromToken(String token) {
         return Jwts.parser()
                 .setSigningKey(jwtSecret)
@@ -48,5 +58,14 @@ public class JwtService {
     public boolean validateToken(String token, UserDetails userDetails) {
         return getEmailFromToken(token)
                 .equals(userDetails.getUsername());
+    }
+
+    public String extractUserIdFromRequest(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            return getIdFromToken(token);
+        }
+        throw new RuntimeException("JWT token missing or invalid");
     }
 }
