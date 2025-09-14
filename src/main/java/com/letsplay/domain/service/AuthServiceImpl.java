@@ -10,8 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.letsplay.application.dto.request.CreateUserCommand;
 import com.letsplay.application.dto.request.LoginUserCommand;
+import com.letsplay.application.dto.request.RegisterUserCommand;
 import com.letsplay.application.dto.response.UserResponse;
 import com.letsplay.application.exception.EmailAlreadyExistsException;
 import com.letsplay.domain.model.User;
@@ -38,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserResponse register(CreateUserCommand cmd) {
+    public UserResponse register(RegisterUserCommand cmd) {
         if (!userRepository.findByEmail(cmd.email()).isEmpty()) {
             throw new EmailAlreadyExistsException(cmd.email());
         }
@@ -50,7 +50,7 @@ public class AuthServiceImpl implements AuthService {
                 cmd.name(),
                 cmd.email(),
                 encoder.encode(cmd.password()),
-                cmd.role() != null ? cmd.role() : "USER",
+                "USER",
                 LocalDateTime.now()
         );
 

@@ -107,4 +107,14 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
+    public User updateByEmail(String email, UpdateUserCommand cmd) {
+        User user = findByEmail(email);
+        return updateUser(user.getId(), cmd);
+    }
+
+    public void deleteByEmail(String email) {
+        User user = findByEmail(email);
+        deleteUser(user.getId());
+    }
+
 }
