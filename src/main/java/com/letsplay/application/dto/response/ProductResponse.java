@@ -13,14 +13,14 @@ public record ProductResponse(
         LocalDateTime createdAt
         ) {
 
-    public static ProductResponse fromDomain(Product user) {
+    public static ProductResponse fromDomain(Product product) {
         return new ProductResponse(
-                user.getId(),
-                user.getName(),
-                user.getDescription(),
-                user.getPrice(),
-                user.getUserId(),
-                user.getCreatedAt()
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getPrice(),
+                product.getUserId(),
+                product.getCreatedAt()
         );
     }
 }

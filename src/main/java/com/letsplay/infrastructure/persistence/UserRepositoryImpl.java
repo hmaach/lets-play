@@ -25,7 +25,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User save(User user) {
-        UserEntity entity = UserMapper.toEntity(user);
+        UserEntity entity = UserMapper.toEntity((User) user);
         UserEntity saved = mongoTemplate.save(entity);
         return UserMapper.toDomain(saved);
     }
