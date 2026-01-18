@@ -119,7 +119,7 @@ This will:
 ### 4. Connect to MongoDB
 
 ```bash
-mongosh "mongodb://localhost:27017"
+mongosh "mongodb://@username:password@localhost:27017/letsplay?authSource=admin"
 ```
 
 ### 5. Stop MongoDB
